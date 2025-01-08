@@ -21,7 +21,7 @@
 
      <label for="floatingInput">first name</label>
     <div class="form-floating ">
-      <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+      <input type="text" class="form-control" id="fast_name" name="first_name"  placeholder="name@example.com">
       
     </div>
 
@@ -29,7 +29,14 @@
 
      <label for="floatingInput">last name</label>
     <div class="form-floating">
-      <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+      <input type="text" class="form-control" id="last_name"  name="last_name" placeholder="name@example.com">
+     
+    </div>
+
+
+      <label for="floatingInput">username</label>
+    <div class="form-floating">
+      <input type="text" class="form-control" id="username"  name="username" placeholder="name@example.com">
      
     </div>
 
@@ -37,22 +44,25 @@
 
 
 
-    <label for="floatingInput">Email address</label>
+    <label for="floatingInput">email address</label>
     <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+      <input type="email" class="form-control" id="email"  name="email" placeholder="name@example.com">
       <label for="floatingInput">Email-address:</label>
     </div>
 
     <label for="floatingInput">Password</label>
     <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <input type="password" class="form-control" id="password" name="password" placeholder="Password">
       <label for="floatingPassword">Password:</label>
     </div>
+     
 
-     <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-      <label for="floatingPassword">Retype-password:</label>
+      <label for="floatingInput">confirmpassword</label>
+    <div class="form-floating">
+      <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" placeholder="Password">
+      <label for="floatingPassword">confirmpassword:</label>
     </div>
+   
 
 
     <div class="form-check text-start my-3">
@@ -61,7 +71,7 @@
         Remember me
       </label>
     </div>
-    <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+    <button class="btn btn-primary w-100 py-2" type="submit">Sign up</button>
   
   </form>
 </main>
