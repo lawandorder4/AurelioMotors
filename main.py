@@ -195,4 +195,16 @@ def cart():
 
     #            cursor = conn.cursor()
 
- 
+
+    @app.route("/products/<product_id>/reviews", methods=['POST'])
+    @flask_login.login_required
+    def review():
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    cursor.execute(f"""
+                    
+""")
+
+
+    
