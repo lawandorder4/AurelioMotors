@@ -14,7 +14,7 @@ app.secret_key = conf.secret_key
 
 login_manger = flask_login.LoginManager()
 login_manger.init_app(app)
-login_manger.login_view = ('/sign_up')
+login_manger.login_view = ('/signin')
 
 
 class User:
@@ -29,8 +29,8 @@ class User:
         self.first_name = first_name 
         self.last_name = last_name
 
-        def get_id(self):
-            return str(self.id)
+    def get_id(self):
+        return str(self.id)
         
 
 @login_manger.user_loader
@@ -46,7 +46,7 @@ def load_user(user_id):
     conn.close()
 
     if result is not None:
-        return User(result["id"], result["username"], result["email"], result["first_name"], result["last_name"])
+        return User(result["ID"], result["username"], result["email"], result["first_name"], result["last_name"])
     
         
 
@@ -72,11 +72,16 @@ def index():
 
 @app.route("/browse")
 def product_browse():
+    query = request.args.get('query')
+
     conn = connect_db()
 
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM `Product` ;")
+    if query is None:
+           cursor.execute("SELECT * FROM `Product` ;")
+    else:
+        cursor.execute(f"SELECT * FROM `Product` WHERE `name` LIKE '%{query}%' ; ")      
 
     results = cursor.fetchall()
 
@@ -90,7 +95,7 @@ def product_browse():
 
 
 
-@app.route("/product/<product_id>")
+@app.route("/Product/<product_id>")
 def product_page(product_id):
     conn = connect_db()
 
@@ -101,17 +106,12 @@ def product_page(product_id):
 
 
     result = cursor.fetchone()
-    if result is None:
-          abort(404)
+    #if result is None:
+       #   abort(404)
 
     cursor.close()
     conn.close()
-
-
-
-
-
-    return result
+    return render_template("product.html.jinja")
 
 
 @app.route("/sign_up", methods=["POST","GET"])
@@ -196,15 +196,50 @@ def cart():
     #            cursor = conn.cursor()
 
 
-    @app.route("/products/<product_id>/reviews", methods=['POST'])
-    @flask_login.login_required
-    def review():
-    conn = connect_db()
-    cursor = conn.cursor()
+@app.route("/products/<product_id>/reviews", methods=['POST'])
+@flask_login.login_required
+def review(product_id):
+     conn = connect_db()
+     cursor = conn.cursor()
 
-    cursor.execute(f"""
-                    
-""")
+     return redirect('/')
 
 
+@app.route("/signin", methods=["POST","GET"])
+def signin():
+    if flask_login.current_user.is_authenticated:
+            return redirect ("/")
     
+    if request.method == 'POST':
+        username = request.form["username"]
+        password = request.form["password"]
+
+
+        conn = connect_db()
+        cursor = conn.cursor()
+
+        cursor.execute(f"SELECT * FROM `Customer` WHERE `username` = '{username}'; ")
+        result = cursor.fetchone()
+
+        if result is None:
+            flash("Your username/password is incorrect")
+        elif password != result["password"]:
+            flash("Your username/password is incorrect")
+        else:
+            user = User(
+                result["ID"],
+                result["username"],
+                result["email"],
+                result["first_name"],
+                result["last_name"] 
+            )
+    
+            flask_login.login_user(user)
+        
+            return redirect('/')
+
+
+    return render_template("sign_in.html.jinja")
+
+ 
+
